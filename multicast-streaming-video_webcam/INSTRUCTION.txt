@@ -1,0 +1,20 @@
+These are the instructions for running the source codes within the containing folder.
+
+***For running external video file(s) aside from the included ones***
+1. Make sure the video file(s) are located within the same folder as the python files.
+2. Open video_convert.py in any code editor and change test.mp4 to your video file name as well as provide another .wav file name for the audio file. (this is because the streaming process need seperated audio and video file, so this will extract audio from video)
+3. Open the python files that you want to run in any code editor and change the video and audio file name to the ones you prefer.
+4. Save and run the file.
+
+***For live webcam multicast streaming***
+1. Open 2 or more command prompts.
+2. Locate all command prompts to the directory of the containing folder of the files.
+3. Run live_cam_sv.py first in one command prompt to initiate the server.
+4. Run live_cam_cl.py first in other(s) to initiate the client.
+5. Close command prompt to exit.
+
+***For live video multicast streaming***
+Same steps as above but replace live_cam_sv.py and live_cam_cl.py with live_video_sv.py and live_video_cl.py respectively.
+
+***For non-live video multicast streaming***
+Same steps as above but replace live_cam_sv.py and live_cam_cl.py with video-sv.py and video-cl.py respectively.
