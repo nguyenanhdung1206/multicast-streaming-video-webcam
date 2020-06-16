@@ -92,7 +92,8 @@ if __name__ == '__main__':
             frame_matrix = np.reshape(frame_matrix, (IMAGE_HEIGHT, IMAGE_WIDTH,COLOR_PIXEL))
 
             # Show viewer
-            cv2.imshow('Client', frame_matrix)
+            cv2.namedWindow("Webcam", cv2.WINDOW_NORMAL)
+            cv2.imshow('Webcam', frame_matrix)
 
             # Terminate
             if cv2.waitKey(1) & 0xFF == ord('q'):

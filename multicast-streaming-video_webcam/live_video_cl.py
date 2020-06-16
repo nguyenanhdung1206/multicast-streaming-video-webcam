@@ -31,14 +31,14 @@ AUDIO_SERVER_PORT = 11112
 TIMEOUT_SOCKET = 1
 
 # Webcam configuration
-IMAGE_HEIGHT = 540
-IMAGE_WIDTH = 960
+IMAGE_HEIGHT = 720
+IMAGE_WIDTH = 1280
 COLOR_PIXEL = 3  # RGB
 
 # PyAudio configuration
 SIZE = 1024
-CHANNELS = 1
-RATE = 10240
+CHANNELS = 2
+RATE = 44100
 CHUNK = 1024
 WIDTH=2
 INPUT = True
@@ -50,7 +50,6 @@ def audio_thread(socket_connection):
     stream = p.open(format=FORMAT,
                     channels=CHANNELS,
                     rate=RATE,
-                    input=True,
                     output=True,
                     frames_per_buffer=CHUNK)
 
@@ -92,10 +91,11 @@ if __name__ == '__main__':
             frame_matrix = np.reshape(frame_matrix, (IMAGE_HEIGHT, IMAGE_WIDTH,COLOR_PIXEL))
 
             # Show viewer
-            cv2.imshow('Client', frame_matrix)
+            cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
+            cv2.imshow('Video', frame_matrix)
 
             # Terminate
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(82) & 0xFF == ord('q'):
                 break
         except Exception as e:
             print ("[Error] " + str(e))

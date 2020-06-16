@@ -7,6 +7,7 @@ import pyaudio
 import numpy as np
 from threading import Thread, Lock
 import pickle
+import wave
 
 """
     File name: tcp-streaming-multicast-server-audio.video.py
@@ -33,8 +34,8 @@ MAX_NUM_CONNECTIONS_LISTENER = 20
 
 # PyAudio configuration
 CHUNK = 1024
-CHANNELS = 1
-RATE = 10240
+CHANNELS = 2
+RATE = 44100
 INPUT = True
 FORMAT = pyaudio.paInt16
 WIDTH=2
@@ -42,24 +43,18 @@ WIDTH=2
 mutex=Lock()
 
 class ConnectionPoolAudio(Thread):
-    def __init__(self, ip, port, conn):
+    def __init__(self, ip, port, conn,wf):
         Thread.__init__(self)
         self.ip = ip
         self.port = port
         self.conn = conn
+        self.wf=wf
         print ("[+][.audio] New server socket thread started for " + ip + ":" + str(port))
 
     def run(self):
-        p = pyaudio.PyAudio()
-        stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    input=True,
-                    output=True,
-                    frames_per_buffer=CHUNK)
                     
         while True:
-            data = stream.read(CHUNK)
+            data = self.wf.readframes(CHUNK)
             self.conn.send(data)
         self.conn.close()
         stream.stop_stream()
@@ -99,13 +94,20 @@ def tcp_audio_thread():
     connection.listen(MAX_NUM_CONNECTIONS_LISTENER)
     while True:
         (conn, (ip, port)) = connection.accept()
-        thread = ConnectionPoolAudio(ip, port, conn)
+        wf = wave.open('test.wav', 'rb')
+        p = pyaudio.PyAudio()
+        stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    output=True,
+                    frames_per_buffer=CHUNK)
+        thread = ConnectionPoolAudio(ip, port, conn,wf)
         thread.start()
     
 
 
 def tcp_video_thread():
-    camera = cv2.VideoCapture('test.mkv')
+    camera = cv2.VideoCapture('test.mp4')
     connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     connection.bind((IP_SERVER, VIDEO_SERVER_PORT))

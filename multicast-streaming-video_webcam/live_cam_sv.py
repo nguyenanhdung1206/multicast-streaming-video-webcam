@@ -39,7 +39,6 @@ CHANNELS = 1
 RATE = 10240
 INPUT = True
 FORMAT = pyaudio.paInt16
-WIDTH=2
 
 mutex=Lock()
 
