@@ -57,8 +57,6 @@ class ConnectionPoolAudio(Thread):
             data = self.wf.readframes(CHUNK)
             self.conn.send(data)
         self.conn.close()
-        stream.stop_stream()
-        stream.close()
         p.terminate()
 
 
@@ -88,21 +86,23 @@ class ConnectionPoolVideo(Thread):
 
 
 def tcp_audio_thread():
+    wf = wave.open('test.wav', 'rb')
+    p = pyaudio.PyAudio()
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    output=True,
+                    frames_per_buffer=CHUNK)
     connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     connection.bind((IP_SERVER, AUDIO_SERVER_PORT))
     connection.listen(MAX_NUM_CONNECTIONS_LISTENER)
     while True:
         (conn, (ip, port)) = connection.accept()
-        wf = wave.open('test.wav', 'rb')
-        p = pyaudio.PyAudio()
-        stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    output=True,
-                    frames_per_buffer=CHUNK)
         thread = ConnectionPoolAudio(ip, port, conn,wf)
         thread.start()
+    stream.stop_stream()
+    stream.close()
     
 
 

@@ -95,7 +95,7 @@ if __name__ == '__main__':
             cv2.imshow('Video', frame_matrix)
 
             # Terminate
-            if cv2.waitKey(82) & 0xFF == ord('q'):
+            if cv2.waitKey(83) & 0xFF == ord('q'):
                 break
         except Exception as e:
             print ("[Error] " + str(e))
