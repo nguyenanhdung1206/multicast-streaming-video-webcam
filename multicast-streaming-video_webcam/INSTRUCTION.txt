@@ -1,4 +1,5 @@
 These are the instructions for running the source codes within the containing folder.
+If any python library within the files are not present on your computer, please install before executing, mainly: cv2,pyaudio,pickle,..etc
 
 ***For running external video file(s) aside from the included ones***
 1. Make sure the video file(s) are located within the same folder as the python files.
